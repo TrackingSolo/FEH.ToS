@@ -1,56 +1,517 @@
-{
-  "manifest_version": 3,
-  "name": "FEH Terms of Service",
-  "version": "1.0",
-  "description": "FEH Terms of Service",
-  "permissions": [
-    "activeTab",
-    "storage",
-    "identity",
-    "scripting"
-  ],
-  "host_permissions": [
-    "https://*.zillow.com/*",
-    "https://*.realtor.com/*",
-    "https://*.redfin.com/*",
-    "https://*.trulia.com/*",
-    "https://*.homes.com/*",
-    "*://*/"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://*.zillow.com/*",
-        "https://*.realtor.com/*",
-        "https://*.redfin.com/*",
-        "https://*.trulia.com/*",
-        "https://*.homes.com/*",
-        "file://*/*",
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": ["content.js"],
-      "run_at": "document_end",
-      "all_frames": false
-    }
-  ],
-  "action": {
-    "default_popup": "popup.html",
-    "default_title": "FEH Real Estate Scraper"
-  },
-  "oauth2": {
-    "client_id": "djgecodlpjcmljpimdfodmjpffeekhjo.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/drive.file"]
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["scraper.js"],
-      "matches": ["<all_urls>"]
-    }
-  ]
-}
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="eHza4yl8Tg8sWxqsFeSNKaxlpX2OPsO8_hLYNw_bL18" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEH - Legal Documents</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .nav-menu {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+        
+        .nav-menu h2 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .nav-item {
+            padding: 1rem;
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .nav-item a {
+            color: #1e3a8a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-item a:hover {
+            color: #3b82f6;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+        
+        .section h1 {
+            color: #1e3a8a;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section h2 {
+            color: #374151;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .section h3 {
+            color: #4b5563;
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+        
+        .section p {
+            margin-bottom: 1rem;
+            color: #4b5563;
+        }
+        
+        .section ul {
+            margin: 1rem 0 1rem 2rem;
+            color: #4b5563;
+        }
+        
+        .section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .disclaimer {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .disclaimer h4 {
+            color: #92400e;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .disclaimer p {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-info {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .contact-info h4 {
+            color: #047857;
+            margin-bottom: 0.75rem;
+        }
+        
+        .contact-info p {
+            color: #047857;
+            margin-bottom: 0.25rem;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .back-to-top:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>FEH</h1>
+            <p>Legal Documents & Privacy Information</p>
+        </header>
+        
+        <nav class="nav-menu">
+            <h2>Quick Navigation</h2>
+            <div class="nav-grid">
+                <div class="nav-item">
+                    <a href="#terms-of-service">Terms of Service</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#privacy-policy">Privacy Policy</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#section-508">Accessibility Statement</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#additional-disclosures">Additional Disclosures</a>
+                </div>
+            </div>
+        </nav>
+        
+        <section id="terms-of-service" class="section">
+            <h1>Terms of Service</h1>
+            <p><strong>Last Updated: [Date]</strong></p>
+            
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing or using the FEH app and/or  extension("Service"), available through our mobile application, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use our Service.</p>
+            
+            <h2>2. Service Description</h2>
+            <p>FEH is a free service that helps users find residential properties and their proximity to among other things, Department of Veterans Affairs medical facilities. Our Service provides:</p>
+            <ul>
+                <li>Property listings with location information</li>
+                <li>Distance calculations to nearest VA medical facilities</li>
+                <li>Interactive maps showing properties and VA facilities</li>
+                <li>Search and filtering capabilities</li>
+                <li>User account features for saving searches and preferences</li>
+            </ul>
+            
+            <h2>3. User Accounts and Registration</h2>
+            <p>To access certain features, you must create an account by providing accurate and complete information including your email address and chosen password. You are responsible for:</p>
+            <ul>
+                <li>Maintaining the confidentiality of your account credentials</li>
+                <li>All activities that occur under your account</li>
+                <li>Immediately notifying us of any unauthorized use of your account</li>
+            </ul>
+            
+            <h2>4. Acceptable Use</h2>
+            <p>You agree to use our Service only for lawful purposes and in accordance with these Terms. You agree NOT to:</p>
+            <ul>
+                <li>Use the Service for any illegal or unauthorized purpose</li>
+                <li>Attempt to interfere with the Service's functionality or security</li>
+                <li>Copy, modify, or distribute any content from the Service without permission</li>
+                <li>Use automated systems to access the Service excessively</li>
+                <li>Provide false or misleading information when creating an account</li>
+            </ul>
+            
+            <div class="disclaimer">
+                <h4>Data and Information Disclaimer</h4>
+                <p><strong>Important</strong>: Our Service provides estimated distances and information about VA medical facilities and property listings. This information:</p>
+                <ul>
+                    <li>May not be current, complete, or accurate</li>
+                    <li>Should not be relied upon for medical emergency planning</li>
+                    <li>May change without notice due to facility closures, relocations, or service modifications</li>
+                    <li>Is provided for informational purposes only</li>
+                </ul>
+                <p>You should independently verify all property and VA facility information before making any decisions.</p>
+            </div>
+            
+            <h2>6. Third-Party Services and APIs</h2>
+            <p>Our Service integrates with third-party services including:</p>
+            <ul>
+                <li>Department of Veterans Affairs APIs for facility information</li>
+                <li>Google Maps for mapping and location services</li>
+                <li>Real estate data providers for property listings</li>
+                <li>Analytics services for improving our Service</li>
+            </ul>
+            <p>We are not responsible for the availability, accuracy, or functionality of these third-party services.</p>
+            
+            <div class="contact-info">
+                <h4>Contact Information</h4>
+                <p>For questions about these Terms, please contact us at:</p>
+                <p>Email: legal@vapropertyfinder.com</p>
+                <p>Address: [Company Address]</p>
+            </div>
+        </section>
+        
+        <section id="privacy-policy" class="section">
+            <h1>Privacy Policy</h1>
+            <p><strong>Last Updated: [Date]</strong><br>
+            <strong>Privacy Policy URL: <a href="https://vapropertyfinder.com/privacy">https://vapropertyfinder.com/privacy</a></strong></p>
+            
+            <h2>1. Introduction</h2>
+            <p>FEH ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and website (collectively, the "Service").</p>
+            
+            <h2>2. Information We Collect</h2>
+            
+            <h3>2.1 Personal Information</h3>
+            <p>We collect the following personal information:</p>
+            <ul>
+                <li><strong>Account Information</strong>: Email address, username, and password</li>
+                <li><strong>Contact Information</strong>: Name and phone number (if provided)</li>
+                <li><strong>Search Preferences</strong>: Saved searches, property preferences, favorite listings</li>
+                <li><strong>Communication Data</strong>: Messages sent through our contact forms or support channels</li>
+            </ul>
+            
+            <h3>2.2 Location Information</h3>
+            <p>We collect location data to provide our core services:</p>
+            <ul>
+                <li><strong>Device Location</strong>: GPS coordinates when you use location-based features</li>
+                <li><strong>Search Locations</strong>: ZIP codes and addresses you search</li>
+                <li><strong>Property Locations</strong>: Addresses of properties you view or save</li>
+            </ul>
+            
+            <h2>3. How We Use Your Information</h2>
+            <p>We use your information to:</p>
+            <ul>
+                <li>Provide and maintain our Service</li>
+                <li>Calculate distances between properties and VA medical facilities</li>
+                <li>Save your search preferences and favorite properties</li>
+                <li>Communicate with you about your account or our Service</li>
+                <li>Improve and optimize our Service functionality</li>
+                <li>Comply with legal obligations</li>
+            </ul>
+            
+            <h2>4. Third-Party Services and Data Sharing</h2>
+            
+            <div class="disclaimer">
+                <h4>Data Sharing Policy</h4>
+                <p><strong>Important</strong>: We do NOT share your personal information with:</p>
+                <ul>
+                    <li>Real estate agents or brokers</li>
+                    <li>Property sellers or landlords</li>
+                    <li>Marketing companies or advertisers</li>
+                    <li>Any third parties for commercial purposes</li>
+                </ul>
+                <p>We only share data with our service providers as necessary to operate the Service, and they are contractually required to protect your information.</p>
+            </div>
+            
+            <h2>5. Location Data Protections</h2>
+            <p>We implement specific protections for your location information:</p>
+            <ul>
+                <li><strong>Encrypted Storage</strong>: All location data is encrypted both in transit and at rest</li>
+                <li><strong>Limited Access</strong>: Only authorized personnel can access location data for technical support</li>
+                <li><strong>No Precise Tracking</strong>: We do not continuously track your location</li>
+                <li><strong>User Control</strong>: You can disable location services at any time through your device settings</li>
+                <li><strong>Automatic Deletion</strong>: Precise location coordinates are automatically deleted after 30 days</li>
+            </ul>
+            
+            <h2>7. Your Privacy Rights</h2>
+            <p>You have the following rights regarding your personal information:</p>
+            
+            <h3>7.1 Access</h3>
+            <p>You can request a copy of all personal information we have about you by contacting privacy@vapropertyfinder.com.</p>
+            
+            <h3>7.2 Correction</h3>
+            <p>You can update your account information directly in the app or by contacting us to correct inaccurate information.</p>
+            
+            <h3>7.3 Deletion</h3>
+            <p>You can request deletion of your account and associated personal information by:</p>
+            <ul>
+                <li>Using the "Delete Account" feature in the app settings</li>
+                <li>Emailing privacy@vapropertyfinder.com</li>
+                <li>Contacting our support team</li>
+            </ul>
+            
+            <div class="contact-info">
+                <h4>Contact Us</h4>
+                <p>For questions about this Privacy Policy or our privacy practices:</p>
+                <p>Email: privacy@vapropertyfinder.com</p>
+                <p>Privacy Officer: [Name and Address]</p>
+                <p>Phone: [Phone Number]</p>
+            </div>
+        </section>
+        
+        <section id="section-508" class="section">
+            <h1>Section 508 Compliance Statement</h1>
+            
+            <h2>Accessibility Commitment</h2>
+            <p>FEH is committed to ensuring digital accessibility for all users, including those with disabilities. We strive to adhere to Section 508 of the Rehabilitation Act and the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards.</p>
+            
+            <h2>Accessibility Features Implemented</h2>
+            
+            <h3>1. Screen Reader Compatibility</h3>
+            <ul>
+                <li><strong>Semantic HTML</strong>: All content uses proper heading structures and landmarks</li>
+                <li><strong>Alt Text</strong>: Descriptive alternative text for all images, including property photos and map elements</li>
+                <li><strong>Form Labels</strong>: Clear, descriptive labels for all form inputs</li>
+                <li><strong>Property Listings</strong>: Structured data that announces as "3-bedroom house, $250,000, 2.5 miles from Richmond VA Medical Center"</li>
+                <li><strong>Navigation</strong>: Logical tab order and skip links for efficient navigation</li>
+            </ul>
+            
+            <h3>2. Keyboard Accessibility</h3>
+            <ul>
+                <li><strong>Full Functionality</strong>: All features accessible via keyboard navigation</li>
+                <li><strong>Visible Focus</strong>: Clear focus indicators on all interactive elements</li>
+                <li><strong>Tab Navigation</strong>: Logical tab order through property listings, filters, and maps</li>
+                <li><strong>Keyboard Shortcuts</strong>: Standard shortcuts for common actions</li>
+                <li><strong>Modal Dialogs</strong>: Proper focus management in pop-up windows</li>
+            </ul>
+            
+            <h3>3. Visual Accessibility</h3>
+            <ul>
+                <li><strong>Color Contrast</strong>: Minimum 4.5:1 contrast ratio for normal text, 3:1 for large text</li>
+                <li><strong>Color Independence</strong>: Information not conveyed by color alone</li>
+                <li><strong>Font Scaling</strong>: Support for text enlargement up to 200% without horizontal scrolling</li>
+                <li><strong>Responsive Design</strong>: Content remains usable at all zoom levels</li>
+                <li><strong>High Contrast Mode</strong>: Support for system high contrast settings</li>
+            </ul>
+            
+            <div class="contact-info">
+                <h4>Feedback and Support</h4>
+                <p>We welcome feedback about the accessibility of FEH. If you encounter accessibility barriers:</p>
+                <p>Email: accessibility@vapropertyfinder.com</p>
+                <p>Phone: [Accessible Phone Number with TTY]</p>
+                <p>Feedback Form: [Accessible Online Form URL]</p>
+            </div>
+        </section>
+        
+        <section id="additional-disclosures" class="section">
+            <h1>Additional Required Disclosures</h1>
+            
+            <div class="disclaimer">
+                <h4>Government Data Disclaimer</h4>
+                <p><strong>Important Notice</strong>: VA facility information is provided by the Department of Veterans Affairs through official government APIs. FEH is not affiliated with, endorsed by, or officially connected to the Department of Veterans Affairs or any other government agency.</p>
+                <p><strong>Data Accuracy</strong>: While we strive to provide current and accurate information, VA medical facility data including locations, services, hours, and availability may change without notice. We update our facility database regularly, but users should verify current facility information directly with the Department of Veterans Affairs before making healthcare or housing decisions.</p>
+            </div>
+            
+            <h2>Real Estate Data Disclaimer</h2>
+            <ul>
+                <li><strong>No MLS Data</strong>: This service does not use Multiple Listing Service (MLS) data</li>
+                <li><strong>No Broker Relationships</strong>: We do not have partnerships with real estate brokers or agents</li>
+                <li><strong>No Commission Structure</strong>: We do not receive referral fees or commissions from real estate transactions</li>
+                <li><strong>Independent Service</strong>: Property information is obtained from public sources and third-party APIs</li>
+            </ul>
+            
+            <div class="disclaimer">
+                <h4>Veterans Benefits Disclaimer</h4>
+                <p><strong>Important</strong>: FEH does not provide official information about VA benefits, eligibility, or healthcare services. For official information about:</p>
+                <ul>
+                    <li>VA healthcare benefits and eligibility</li>
+                    <li>Disability compensation</li>
+                    <li>Home loan guarantees</li>
+                    <li>Educational benefits</li>
+                    <li>Other VA programs</li>
+                </ul>
+                <p>Please contact the Department of Veterans Affairs directly:</p>
+                <ul>
+                    <li>Website: <a href="http://www.va.gov">www.va.gov</a></li>
+                    <li>Phone: 1-800-827-1000</li>
+                    <li>Crisis Line: 1-800-273-8255</li>
+                </ul>
+                <p>Our Service only provides location and distance information to help you find properties near VA medical facilities.</p>
+            </div>
+            
+            <h2>Age Restrictions</h2>
+            <p>You must be at least 13 years old to use this Service. Users between 13-17 must have parental consent. We do not knowingly collect information from children under 13.</p>
+            
+            <h2>International Users</h2>
+            <p>This Service is primarily designed for users in the United States seeking information about U.S. properties and VA facilities. International users may experience limited functionality.</p>
+            
+            <div class="disclaimer">
+                <h4>Limitation of Medical Information</h4>
+                <p>This Service does not provide medical advice, healthcare recommendations, or emergency services. For medical emergencies, contact 911 or your nearest emergency medical facility immediately.</p>
+            </div>
+        </section>
+    </div>
+    
+    <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+    
+    <script>
+        // Smooth scrolling for navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-item a');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Show/hide back to top button
+            const backToTopButton = document.querySelector('.back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
